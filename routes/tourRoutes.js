@@ -9,10 +9,10 @@ router
     .post(tourController.createTour)
 
 router
-    .route('/:id')
-    .get(tourController.getTourById)
-    .patch(tourController.updateTour)
-    .delete(tourController.deleteTour)
+  .route("/:id")
+  .get(tourController.getTourById)
+  .patch(tourController.updateTour)
+  .delete(authController.protect, authController.restrictTo('admin'), tourController.deleteTour);
   
 
 module.exports = router;
