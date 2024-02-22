@@ -1,7 +1,10 @@
 const express = require("express");
 
+
 const userRoutes = require("./routes/userRoutes");
+const globalErrorHandler = require('./controllers/errorController')
 const tourRoutes = require("./routes/tourRoutes");
+const AppError = require("./utils/appError");
 
 const app = express();
 
@@ -22,5 +25,12 @@ app.use((req, res, next) => {
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/tour", tourRoutes);
 
+//if above routes can not handle the request then it must be a unhandled route and we need to send a res with error
+//so first we need to create the error using the AppError class then send a response using the errorcontroller 
+app.all("*", (req, res, next) => {
+  next(new AppError(`Can't find the ${req.originalUrl} on this server`, 404));
+});
+
+app.use(globalErrorHandler);
 //exports the app module
 module.exports = app;
